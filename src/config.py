@@ -1,6 +1,0 @@
-db_user = "user"
-db_password = "password"
-db_address = "locahost"
-db_port = "1521"
-db_name= "database"
-db_table_name = "tablename"
