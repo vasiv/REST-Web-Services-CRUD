@@ -28,6 +28,4 @@ public class JdbcManager {
             return statement.executeQuery(query);
         }
     }
-
-
 }

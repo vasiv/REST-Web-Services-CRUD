@@ -13,12 +13,11 @@ public abstract class PropertiesUtil {
 
     static {
         properties = new Properties();
-        try (InputStream input = PropertiesUtil.class.getClassLoader().getResourceAsStream("config.properties")) {
+        try (InputStream input = PropertiesUtil.class.getClassLoader().getResourceAsStream("pl/kielce/tu/crudApi/generator/config.properties")) {
             if (input != null) {
                 properties.load(input);
             } else {
                 System.err.println("Cannot open properties file.");
-                //TODO add logger
             }
         } catch (IOException e) {
 
