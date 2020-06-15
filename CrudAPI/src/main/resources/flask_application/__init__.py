@@ -34,7 +34,7 @@ def insert():
 def delete(id_data):
     flash("Record Has Been Deleted Successfully")
     cur = mysql.connection.cursor()
-    $<deleteStatement>
+    cur.execute("DELETE FROM $<tableName> WHERE id=%s", id_data)
     mysql.connection.commit()
     return redirect(url_for('Index'))
 

@@ -7,13 +7,17 @@ import java.util.Properties;
 /**
  * @author ciepluchs
  */
-public abstract class PropertiesUtil {
+public class PropertiesUtil {
 
-    private static Properties properties;
+//    private static final Properties properties;
 
     static {
-        properties = new Properties();
-        try (InputStream input = PropertiesUtil.class.getClassLoader().getResourceAsStream("pl/kielce/tu/crudApi/generator/config.properties")) {
+
+    }
+
+    public String getProperty(String key) {
+        Properties properties = new Properties();
+        try (InputStream input = this.getClass().getResourceAsStream("config.properties")) {
             if (input != null) {
                 properties.load(input);
             } else {
@@ -22,12 +26,6 @@ public abstract class PropertiesUtil {
         } catch (IOException e) {
 
         }
-    }
-
-    private PropertiesUtil() {
-    }
-
-    public static String getProperty(String key) {
         return properties.getProperty(key);
     }
 }
