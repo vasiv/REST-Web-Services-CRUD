@@ -1,9 +1,14 @@
 package pl.kielce.tu.crudApi.generator.util;
 
+import pl.kielce.tu.crudApi.generator.GeneratorApp;
+
 import java.io.*;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.nio.file.*;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.util.Collections;
 import java.util.stream.Collectors;
 
 /**
@@ -42,5 +47,35 @@ public abstract class FileUtil {
         try (BufferedReader br = new BufferedReader(new InputStreamReader(fileStream, Charset.defaultCharset()))) {
             return br.lines().collect(Collectors.joining(System.lineSeparator()));
         }
+    }
+
+    public static void copyFromJar(String source, final Path target) throws URISyntaxException, IOException {
+        URI resource = GeneratorApp.class.getResource("").toURI();
+        FileSystem fileSystem = FileSystems.newFileSystem(
+                resource,
+                Collections.<String, String>emptyMap()
+        );
+
+
+        final Path jarPath = fileSystem.getPath(source);
+
+        Files.walkFileTree(jarPath, new SimpleFileVisitor<Path>() {
+
+            private Path currentTarget;
+
+            @Override
+            public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
+                currentTarget = target.resolve(jarPath.relativize(dir).toString());
+                Files.createDirectories(currentTarget);
+                return FileVisitResult.CONTINUE;
+            }
+
+            @Override
+            public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+                Files.copy(file, target.resolve(jarPath.relativize(file).toString()), StandardCopyOption.REPLACE_EXISTING);
+                return FileVisitResult.CONTINUE;
+            }
+
+        });
     }
 }

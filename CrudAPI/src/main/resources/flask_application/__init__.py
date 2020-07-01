@@ -4,12 +4,11 @@ from flask_mysqldb import MySQL
 
 app = Flask(__name__)
 app.secret_key = 'secret_key'
-app.config['MYSQL_HOST'] = $<mysql_host>
-app.config['MYSQL_USER'] = $<mysql_user>
-app.config['MYSQL_PASSWORD'] = $<mysql_password>
-app.config['MYSQL_DB'] = $<mysql_db>
+app.config['MYSQL_HOST'] = '$<mysql_host>'
+app.config['MYSQL_USER'] = '$<mysql_user>'
+app.config['MYSQL_PASSWORD'] = '$<mysql_password>'
+app.config['MYSQL_DB'] = '$<mysql_db>'
 mysql = MySQL(app)
-
 
 @app.route('/')
 def Index():
@@ -23,9 +22,9 @@ def Index():
 def insert():
     if request.method == "POST":
         flash("Data Inserted Successfully")
-        $<formFieldsPython>
+$<formFieldsPython>
         cur = mysql.connection.cursor()
-        $<insertStatement>
+$<insertStatement>
         mysql.connection.commit()
         return redirect(url_for('Index'))
 
@@ -34,7 +33,7 @@ def insert():
 def delete(id_data):
     flash("Record Has Been Deleted Successfully")
     cur = mysql.connection.cursor()
-    cur.execute("DELETE FROM $<tableName> WHERE id=%s", id_data)
+    cur.execute("DELETE FROM $<tableName> WHERE id=%s",(id_data,))
     mysql.connection.commit()
     return redirect(url_for('Index'))
 
@@ -42,9 +41,9 @@ def delete(id_data):
 @app.route('/update',methods=['POST','GET'])
 def update():
     if request.method == 'POST':
-        $<updateFormFields>
+$<updateFormFields>
         cur = mysql.connection.cursor()
-        $<updateStatement>
+$<updateStatement>
         flash("Data Updated Successfully")
         mysql.connection.commit()
         return redirect(url_for('Index'))

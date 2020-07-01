@@ -3,44 +3,39 @@ package pl.kielce.tu.crudApi.generator;
 
 import pl.kielce.tu.crudApi.generator.database.DatabaseManager;
 import pl.kielce.tu.crudApi.generator.database.MySqlManager;
+import pl.kielce.tu.crudApi.generator.properties.PropertiesProvider;
 import pl.kielce.tu.crudApi.generator.renderer.Renderer;
+import pl.kielce.tu.crudApi.generator.util.FileUtil;
 
 import java.io.IOException;
-import java.io.InputStream;
+import java.net.URISyntaxException;
+import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.util.Map;
-import java.util.Properties;
 
 /**
  * @author ciepluchs
  */
 public class GeneratorApp {
 
-    private static final Properties config = new Properties();
-    private static final String CONFIG_PATH = "/config.properties";
-
     public static void main(String[] args) throws SQLException {
-        try {
-            initializeConfig();
-        } catch (IOException e) {
-            System.err.println("Cannot initialize config due to: " + e);
-            return;
-        }
-        DatabaseManager mySqlManager = MySqlManager.getJdbcManager(config);
-        String tableName = config.getProperty("database.table");
+
+        DatabaseManager mySqlManager = MySqlManager.getJdbcManager();
+        String tableName = PropertiesProvider.getProperty(PropertiesProvider.DATABASE_TABLE);
         Map<String, String> namesAndTypes = mySqlManager.getColumnsMetadata(tableName);
-        Renderer renderer = new Renderer(namesAndTypes, tableName);
+        Renderer renderer = new Renderer(namesAndTypes);
+
         try {
             renderer.renderFlaskApp();
             renderer.renderIndexPage();
-            renderer.renderAddPage();
+            renderer.renderHeader();
+            FileUtil.copyFromJar("/flask_application/static", Paths.get(PropertiesProvider.getProperty(PropertiesProvider.OUTPUT_DIRECTORY) + "static/"));
         } catch (IOException e) {
             System.err.println("Cannot render project files due to: " + e);
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
         }
+
     }
 
-    private static void initializeConfig() throws IOException {
-        InputStream in = GeneratorApp.class.getResourceAsStream(CONFIG_PATH);
-        config.load(in);
-    }
 }

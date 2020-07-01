@@ -5,8 +5,7 @@
 <div class="container">
     <div class="row">
         <div class="col md-12">
-            <h2>$
-                <tableName> List
+            <h2>$<tableName>
                     <button type="button" class="btn btn-success  pull-right" data-toggle="modal"
                             data-target="#myModal">Add $<tableName> Data                            <!-- placeholder -->
                     </button>
@@ -24,10 +23,10 @@
             {%endif%}
             {%endwith%}
             <table class="table table-striped">
-                $<columnHeaders>                                                                    <!-- placeholder -->
+$<columnHeaders>                                                                                    <!-- placeholder -->
                 {% for row in fetchedRows %}
                 <tr>
-                    $<row>                                                                          <!-- placeholder -->
+$<rows>                                                                                             <!-- placeholder -->
                     <td>
                         <a href="/update/{{row.0}}" class="btn btn-warning btn-xs" data-toggle="modal"
                            data-target="#modaledit{{row.0}}">Edit</a>
@@ -44,7 +43,7 @@
                             </div>
                             <div class="modal-body">
                                 <form action="{{ url_for('update') }}" method="POST">
-                                    $<updateFormInput>                                              <!-- placeholder -->
+$<updateFormInput>                                                                                  <!-- placeholder -->
                                     <div class="form-group">
                                         <button class="btn btn-primary" type="submit">Update</button>
                                     </div>
@@ -70,6 +69,7 @@
                     </div>
                     <div class="modal-body">
                         <form action="{{ url_for('insert') }}" method="POST">
+<!--$<updateFormFields>-->
                             <div class="form-group">
                                 <label>Name:</label>
                                 <input type="text" class="form-control" name="name" required="1">
