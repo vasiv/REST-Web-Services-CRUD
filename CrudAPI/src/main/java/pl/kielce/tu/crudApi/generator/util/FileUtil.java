@@ -49,8 +49,9 @@ public abstract class FileUtil {
         }
     }
 
+
     public static void copyFromJar(String source, final Path target) throws URISyntaxException, IOException {
-        URI resource = GeneratorApp.class.getResource("").toURI();
+        URI resource = FileUtil.class.getResource("").toURI();
         FileSystem fileSystem = FileSystems.newFileSystem(
                 resource,
                 Collections.<String, String>emptyMap()
